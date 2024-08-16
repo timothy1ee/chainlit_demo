@@ -15,16 +15,25 @@ model_kwargs = {
 
 @cl.on_message
 async def on_message(message: cl.Message):
-    # Your custom logic goes here...
-
     response = await client.chat.completions.create(
         messages=[{"role": "user", "content": message.content}],
         **model_kwargs
     )
 
-    # https://platform.openai.com/docs/guides/chat-completions/response-format
-    response_content = response.choices[0].message.content
+    response_message = cl.Message(content="")
+    await response_message.send()
+    
+    stream = await client.chat.completions.create(messages=[{"role": "user", "content": message.content}], 
+                                                  stream=True, **model_kwargs)
+    async for part in stream:
+        if token := part.choices[0].delta.content or "":
+            await response_message.stream_token(token)
 
-    await cl.Message(
-        content=response_content,
-    ).send()
+    await response_message.update()
+
+    # # https://platform.openai.com/docs/guides/chat-completions/response-format
+    # response_content = response.choices[0].message.content
+
+    # await cl.Message(
+    #     content=response_content,
+    # ).send()
