@@ -4,9 +4,9 @@ import os
 import base64
 
 api_key = os.getenv("OPENAI_API_KEY")
-# api_key = "R4019I02UE1CXF68L6UDO1H9O2IQAJOOW9ELO9SW"
+
 endpoint_url = "https://api.openai.com/v1"
-# endpoint_url = "https://api.runpod.ai/v2/5xaa0o8c13a55l/openai/v1"
+# endpoint_url = "https://api.runpod.ai/v2/<serverless id>/openai/v1"
 client = openai.AsyncClient(api_key=api_key, base_url=endpoint_url)
 
 # https://platform.openai.com/docs/models/gpt-4o
